@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Annotate screenshot</title>
+  <link rel="stylesheet" href="annotate.css">
+</head>
+<body>
+  <div class="toolbar">
+    <div class="tools" id="tools">
+      <button data-tool="rect" class="tool tool--active" title="Rectangle (R)">▭</button>
+      <button data-tool="ellipse" class="tool" title="Ellipse (E)">◯</button>
+      <button data-tool="arrow" class="tool" title="Arrow (A)">➚</button>
+      <button data-tool="pen" class="tool" title="Pen (P)">✎</button>
+      <button data-tool="highlight" class="tool" title="Highlighter (H)">▮</button>
+      <button data-tool="text" class="tool" title="Text (T)">T</button>
+      <button data-tool="number" class="tool" title="Numbered marker (N)">①</button>
+      <button data-tool="blur" class="tool" title="Pixelate / redact (B)">▒</button>
+      <button data-tool="crop" class="tool" title="Crop (C)">⌗</button>
+    </div>
+    <div class="options">
+      <label title="Color"><input type="color" id="color" value="#ff2d55"></label>
+      <div class="swatches" id="swatches"></div>
+      <label title="Stroke width"><input type="range" id="width" min="1" max="16" value="4"></label>
+    </div>
+    <div class="actions">
+      <button id="undo" title="Undo (Ctrl/Cmd+Z)">↶</button>
+      <button id="redo" title="Redo (Ctrl/Cmd+Shift+Z)">↷</button>
+      <button id="clear" title="Remove all annotations">Clear</button>
+      <button id="cancel">Cancel</button>
+      <button id="save" class="primary" title="Save (Ctrl/Cmd+S)">Save to test</button>
+    </div>
+  </div>
+  <div class="stage" id="stage">
+    <canvas id="canvas"></canvas>
+    <input id="text-input" class="text-input" hidden>
+  </div>
+  <div class="hint" id="hint">Drag to draw. Double-click a text to edit. Press Esc to cancel a shape.</div>
+  <script type="module" src="annotate.js"></script>
+</body>
+</html>

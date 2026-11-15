@@ -1,0 +1,22 @@
+:root { color-scheme: light dark; --bg: #1e1e22; --fg: #eee; --bar: #2a2a30; --accent: #2f81f7; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); font: 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+body { display: flex; flex-direction: column; }
+.toolbar { display: flex; align-items: center; gap: 12px; padding: 6px 10px; background: var(--bar); flex-wrap: wrap; }
+.tools, .actions, .options { display: flex; gap: 4px; align-items: center; }
+.options { gap: 8px; }
+button { background: #3a3a42; color: var(--fg); border: 1px solid #4a4a52; border-radius: 6px; padding: 5px 9px; font: inherit; cursor: pointer; min-width: 32px; }
+button:hover { background: #45454e; }
+button.tool--active { background: var(--accent); border-color: var(--accent); color: #fff; }
+button.primary { background: #1a7f37; border-color: #1a7f37; color: #fff; font-weight: 600; }
+button:disabled { opacity: .4; cursor: default; }
+.actions { margin-left: auto; }
+input[type=color] { width: 30px; height: 28px; border: 0; padding: 0; background: transparent; cursor: pointer; }
+input[type=range] { width: 90px; }
+.swatches { display: flex; gap: 3px; }
+.swatch { width: 18px; height: 18px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; }
+.swatch--active { border-color: #fff; }
+.stage { flex: 1; overflow: auto; display: flex; align-items: flex-start; justify-content: center; padding: 12px; position: relative; }
+canvas { background: #fff; box-shadow: 0 2px 20px rgba(0,0,0,.5); cursor: crosshair; max-width: 100%; }
+.text-input { position: absolute; background: rgba(255,255,255,.95); color: #000; border: 1px dashed var(--accent); padding: 2px 4px; font: 600 18px sans-serif; min-width: 80px; outline: none; }
+.hint { padding: 4px 10px; color: #aaa; font-size: 12px; background: var(--bar); }

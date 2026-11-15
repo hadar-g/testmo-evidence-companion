@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Testmo Evidence Companion</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <button id="btn-back" class="icon-btn" title="Back" hidden>&larr;</button>
+    <div id="topbar-title" class="topbar__title">Testmo</div>
+    <button id="btn-settings" class="icon-btn" title="Settings" hidden>&#9881;</button>
+  </header>
+
+  <main id="screens">
+    <!-- CONNECT -->
+    <section data-screen="connect" hidden>
+      <h1>Connect to Testmo</h1>
+      <p class="muted">Testmo has no password login for integrations, so this extension uses a personal API key. Create one in Testmo under <strong>your avatar &rarr; API keys</strong>, or ask an admin.</p>
+      <form id="form-connect">
+        <label>Instance URL
+          <input id="in-instance" type="url" placeholder="https://acme.testmo.net" autocomplete="off" required>
+        </label>
+        <label>API key
+          <input id="in-apikey" type="password" placeholder="Paste your Testmo API key" autocomplete="off" required>
+        </label>
+        <label class="check">
+          <input id="in-remember" type="checkbox">
+          <span>Remember this key on this device (encrypted with a passphrase)</span>
+        </label>
+        <div id="remember-fields" hidden>
+          <label>Passphrase
+            <input id="in-passphrase" type="password" minlength="8" placeholder="At least 8 characters" autocomplete="new-password">
+          </label>
+          <p class="muted small">You will be asked for this passphrase whenever Chrome restarts. Without it the stored key cannot be read.</p>
+        </div>
+        <p class="muted small">Otherwise the key stays in memory only and is forgotten when Chrome closes.</p>
+        <button type="submit" class="btn btn--primary" id="btn-connect">Connect</button>
+        <div class="error" id="connect-error" hidden></div>
+      </form>
+    </section>
+
+    <!-- UNLOCK -->
+    <section data-screen="unlock" hidden>
+      <h1>Unlock</h1>
+      <p class="muted">Your API key for <strong id="unlock-instance"></strong> is stored encrypted on this device.</p>
+      <form id="form-unlock">
+        <label>Passphrase
+          <input id="in-unlock" type="password" autocomplete="current-password" required>
+        </label>
+        <button type="submit" class="btn btn--primary">Unlock</button>
+        <button type="button" class="btn btn--ghost" id="btn-forget">Forget saved key</button>
+        <div class="error" id="unlock-error" hidden></div>
+      </form>
+    </section>
+
+    <!-- RUNS -->
+    <section data-screen="runs" hidden>
+      <div class="row">
+        <select id="sel-project" class="grow"></select>
+        <button id="btn-refresh-runs" class="icon-btn" title="Refresh">&#8635;</button>
+      </div>
+      <div class="row">
+        <select id="sel-milestone" class="grow" title="Milestone"></select>
+      </div>
+      <div class="row">
+        <input id="in-run-search" type="search" placeholder="Filter runs" class="grow">
+      </div>
+      <div class="row toggles">
+        <label class="check small"><input id="in-assigned-me" type="checkbox"><span>Assigned to me</span></label>
+        <label class="check small"><input id="in-show-closed" type="checkbox"><span>Include closed</span></label>
+      </div>
+      <div id="assigned-note" class="muted small" hidden></div>
+      <div id="runs-list" class="list"></div>
+      <div id="runs-empty" class="muted center" hidden>No runs found.</div>
+    </section>
+
+    <!-- RUN -->
+    <section data-screen="run" hidden>
+      <div class="run-head card">
+        <div class="run-head__name" id="run-name"></div>
+        <div class="run-head__milestone muted small" id="run-milestone"></div>
+        <div class="progress progress--lg" id="run-progress"></div>
+        <div class="run-head__meta" id="run-meta"></div>
+        <div class="row">
+          <input id="in-case-search" type="search" placeholder="Filter tests" class="grow">
+          <select id="sel-case-filter">
+            <option value="all">All</option>
+            <option value="untested">Untested</option>
+            <option value="done">Done</option>
+            <option value="failed">Failed</option>
+            <option value="drafts">With drafts</option>
+          </select>
+          <button id="btn-refresh-run" class="icon-btn" title="Refresh from Testmo">&#8635;</button>
+        </div>
+      </div>
+      <div id="session-banner" class="banner" hidden></div>
+      <div id="cases-list" class="list"></div>
+      <div id="run-loading" class="muted center" hidden>Loading tests&hellip;</div>
+      <button id="btn-addcase" class="btn btn--block btn--muted" hidden>+ Add a test case to this run</button>
+    </section>
+
+    <!-- CASE -->
+    <section data-screen="case" hidden>
+      <div class="case-nav">
+        <button id="btn-prev" class="btn btn--small">&larr; Prev</button>
+        <span id="case-pos" class="muted small"></span>
+        <button id="btn-next" class="btn btn--small">Next &rarr;</button>
+      </div>
+      <h2 id="case-title" class="case-title"></h2>
+      <div class="case-sub">
+        <span id="case-key" class="pill"></span>
+        <span id="case-status" class="pill"></span>
+        <a id="case-link" href="#" target="_blank" rel="noopener" class="small">Open in Testmo</a>
+      </div>
+      <details id="case-fields" class="fields" open>
+        <summary>Test instructions</summary>
+        <div id="case-fields-body"></div>
+      </details>
+      <details id="case-history" class="fields">
+        <summary>Previous results <span id="case-history-count" class="muted"></span></summary>
+        <div id="case-history-body"></div>
+      </details>
+
+      <div id="evidence" class="evidence">
+        <div class="evidence__head">
+          <span>Evidence <span id="shots-count" class="muted"></span></span>
+          <span class="evidence__actions">
+            <button id="btn-record" class="btn btn--small" title="Record the tab as video and log your clicks, typing and scrolling as steps">&#9679; Record steps</button>
+            <button id="btn-attach" class="btn btn--small" title="Attach image files, or drop them here">&#128206; Attach</button>
+            <button id="btn-capture" class="btn btn--small btn--accent" title="Alt+Shift+S">&#128247; Capture</button>
+            <input id="in-attach" type="file" multiple hidden>
+          </span>
+        </div>
+        <div id="recording" class="recording" hidden>
+          <div class="recording__head"><span class="rec-dot"></span><span>Recording</span> <span id="rec-time" class="muted">0:00</span> <span id="rec-status" class="muted small"></span></div>
+          <ol id="rec-steps" class="rec-steps"></ol>
+          <div class="muted small">Interact with the page. Typing is logged when you leave the field; passwords are never logged.</div>
+        </div>
+        <div id="shots" class="shots"></div>
+        <div id="capture-error" class="error" hidden></div>
+      </div>
+
+      <label class="notes-label">Notes
+        <textarea id="in-notes" rows="4" placeholder="What did you observe? Saved locally as you type."></textarea>
+      </label>
+
+      <div class="statuses" id="status-buttons"></div>
+
+      <div class="submit-row">
+        <span id="timer" class="muted small" title="Elapsed on this test">0:00</span>
+        <label class="check small"><input id="in-autoadvance" type="checkbox"><span>Next after submit</span></label>
+        <button id="btn-submit" class="btn btn--primary" disabled>Submit result</button>
+      </div>
+      <div id="submit-error" class="error" hidden></div>
+    </section>
+
+    <!-- NEW CASE -->
+    <section data-screen="newcase" hidden>
+      <h1>Add a test case</h1>
+      <p class="muted small">Created in the repository and added to this run in one go.</p>
+      <form id="form-newcase">
+        <label>Name
+          <input id="nc-name" type="text" placeholder="Leave empty to use the Scenario title" autocomplete="off">
+        </label>
+        <div class="row">
+          <label class="grow">Folder
+            <select id="nc-folder"></select>
+          </label>
+          <label class="grow">Template
+            <select id="nc-template"></select>
+          </label>
+        </div>
+        <div id="nc-fields"></div>
+        <div class="row">
+          <button type="button" class="btn btn--ghost" id="nc-cancel">Cancel</button>
+          <button type="submit" class="btn btn--primary" id="nc-submit">Create and add to run</button>
+        </div>
+        <div class="error" id="nc-error" hidden></div>
+      </form>
+    </section>
+
+    <!-- SETTINGS -->
+    <section data-screen="settings" hidden>
+      <h1>Settings</h1>
+      <div class="kv"><span>Instance</span><span id="set-instance"></span></div>
+      <div class="kv"><span>Signed in as</span><span id="set-user"></span></div>
+      <div class="kv"><span>Testmo web session</span><span id="set-session"></span></div>
+      <h3>Screenshots</h3>
+      <div class="kv"><span>Capture permission</span><span id="set-capture-state"></span></div>
+      <p class="muted small">Chrome only lets extensions screenshot a tab with the "read data on all sites" permission (or right after you click the toolbar icon). The extension only reads pixels when you press Capture and never sends them anywhere but your Testmo instance.</p>
+      <button id="btn-capture-toggle" class="btn btn--ghost">Grant screenshot permission</button>
+      <label class="check"><input id="set-include-url" type="checkbox"><span>Add the page URL to each submitted result</span></label>
+      <h3>Data on this device</h3>
+      <p class="muted small">Notes and screenshots that have not been submitted are kept in this extension's local storage. Submitted evidence lives in Testmo.</p>
+      <button id="btn-clear-drafts" class="btn btn--ghost">Delete all local drafts and screenshots</button>
+      <h3>Account</h3>
+      <button id="btn-disconnect" class="btn btn--danger">Disconnect and forget API key</button>
+      <p class="muted small" id="set-version"></p>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" hidden></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

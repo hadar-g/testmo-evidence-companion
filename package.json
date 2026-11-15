@@ -1,0 +1,27 @@
+{
+  "name": "testmo-evidence-companion",
+  "version": "0.4.0",
+  "private": true,
+  "description": "Chrome side-panel extension for recording Testmo test results with screenshot evidence.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test \"test/unit/**/*.test.mjs\"",
+    "test:e2e": "node test/e2e/run.mjs",
+    "package": "bash scripts/package.sh",
+    "demo:mock": "node demo/mock-testmo/server.mjs",
+    "demo:shop": "node demo/shop/server.mjs",
+    "demo:record": "node demo/record.mjs",
+    "demo:compose": "python3 demo/compose.py"
+  },
+  "devDependencies": {
+    "playwright": "^1.50.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hadar-g/testmo-evidence-companion.git"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

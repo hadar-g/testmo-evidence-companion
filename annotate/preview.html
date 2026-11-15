@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Recording preview</title>
+  <link rel="stylesheet" href="annotate.css">
+  <style>
+    .wrap { display: grid; grid-template-columns: 1fr 320px; gap: 12px; padding: 12px; flex: 1; min-height: 0; }
+    video { width: 100%; max-height: calc(100vh - 80px); background: #000; border-radius: 8px; }
+    .steps { overflow: auto; font-size: 13px; }
+    .steps li { padding: 4px 0; border-bottom: 1px solid #333; cursor: pointer; }
+    .steps li:hover { color: #fff; }
+    .steps .t { color: #9aa; margin-left: 6px; font-variant-numeric: tabular-nums; }
+    h2 { font-size: 14px; margin: 0 0 8px; }
+  </style>
+</head>
+<body>
+  <div class="toolbar"><strong>Recording</strong><span id="meta" class="hint"></span><div class="actions"><button id="download">Download .webm</button><button id="close">Close</button></div></div>
+  <div class="wrap">
+    <video id="video" controls autoplay muted></video>
+    <div class="steps"><h2>Recorded steps</h2><ol id="steps"></ol></div>
+  </div>
+  <script type="module" src="preview.js"></script>
+</body>
+</html>
