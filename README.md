@@ -2,6 +2,8 @@
 
 ![Testmo Evidence Companion](docs/media/banner-1280x640.png)
 
+[![Install from the Chrome Web Store](https://developer.chrome.com/static/docs/webstore/branding/image/UV4C4ybeBTsZt43U4xis.png)](https://chromewebstore.google.com/detail/testmo-evidence-companion/jilejabcckkbglemalfdbdaamehjpljn)
+
 A Chrome extension that lives in the browser **side panel** so testers can work through a
 [Testmo](https://www.testmo.com) test run without leaving the page they are testing:
 
@@ -67,7 +69,7 @@ Testmo instance or company appears in any of it.
 ## Table of contents
 
 1. [Requirements](#requirements)
-2. [Install for development (Load unpacked)](#install-for-development-load-unpacked)
+2. [Install](#install)
 3. [Connecting to Testmo](#connecting-to-testmo)
 4. [Using the panel](#using-the-panel)
 5. [How results and screenshots are stored in Testmo](#how-results-and-screenshots-are-stored-in-testmo)
@@ -90,7 +92,13 @@ Testmo instance or company appears in any of it.
 - Optional but recommended: being signed in to your Testmo instance in the same Chrome
   profile. See [Why the extension also uses your Testmo browser session](#why-the-extension-also-uses-your-testmo-browser-session).
 
-## Install for development (Load unpacked)
+## Install
+
+[Install from the Chrome Web Store](https://chromewebstore.google.com/detail/testmo-evidence-companion/jilejabcckkbglemalfdbdaamehjpljn). After installing, pin the extension (puzzle-piece icon in the toolbar, then the pin next to *Testmo Evidence Companion*) and click the icon to open the side panel.
+
+To work on the code, or to try a local build, load it unpacked:
+
+### Install for development (Load unpacked)
 
 1. Clone or download this folder.
 2. Open `chrome://extensions`.
